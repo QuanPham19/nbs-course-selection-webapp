@@ -56,10 +56,14 @@ def optimize():
 def logout():
     all_course = get_course_table()
     n = len(all_course)
-    interest_course = pd.DataFrame(session.get('interest_course', []))
-    course_done = session.get('course_done', [])
+    interest_course_data = session.get('interest_course', [])
     max_num = session.get('max_num', [])
     max_credit = session.get('max_credit', [])
+    course_done = session.get('course_done', [])
+    if not interest_course_data or not max_num or not max_credit or not course_done:
+        return render_template('empty.html')
+    interest_course = pd.DataFrame(interest_course_data)
+
     for index, row in interest_course.iterrows():
         course_number = row['Course Number']
         interest_level = row['Interest level']
