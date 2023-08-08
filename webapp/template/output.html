@@ -1,0 +1,55 @@
+{% extends "base.html" %} {% block title %} Result {% endblock %}
+{% block content %}
+<style>
+     th:nth-child(1), table.output-table td:nth-child(1) {
+    width: 10%;
+}
+
+ th:nth-child(2), table.output-table td:nth-child(2) {
+    width: 15%;
+}
+
+ th:nth-child(3), table.output-table td:nth-child(3) {
+    width: 20%;
+}
+
+ th:nth-child(4), table.output-table td:nth-child(4) {
+    width: 25%;
+}
+
+ th:nth-child(5), table.output-table td:nth-child(5) {
+    width: 15%;}
+
+ th, td {
+  border: 1px solid #808080;}
+</style>
+<div class="form-wrapper">
+    <h3 align="center" style="font-weight: bold;">Optimization Summary</h3>
+    <table class="output-summary">
+        <tr>
+            <th>Total interest</th>
+            <th>Total course chosen</th>
+            <th>Semester 1 course count</th>
+            <th>Semester 2 course count</th>
+            <th>Semester 1 AUs count</th>
+            <th>Semester 2 AUs count</th>
+        </tr>
+        <tr>
+            <td>{{objective}}</td>
+            <td>{{total}}</td>
+            <td>{{count1}}</td>
+            <td>{{count2}}</td>
+            <td>{{credit1}}</td>
+            <td>{{credit2}}</td>
+        </tr>
+    </table>
+
+    <h3 align="center" style="font-weight: bold;">Semester 1 Suggestion</h3>
+    <table class="output-table">{{ table1|safe }}</table>
+    <h3 align="center" style="font-weight: bold;">Semester 2 Suggestion</h3>
+    <table class="output-table">{{ table2|safe }}</table>
+
+    
+</div>
+
+{%endblock%}

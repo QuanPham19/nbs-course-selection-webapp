@@ -1,0 +1,136 @@
+{% extends "base.html" %} {% block title %} Optimize {% endblock %}
+{% block content %}
+<div class="column-container">
+  <div class="column-1">
+    <div class="form-wrapper">
+      <form method="POST" class="form-group" id="done-before">
+
+        <h3 align="center" style="font-weight: bold;">Additional Information</h3>
+        <input type="text" class="form-control" id="done11" name="maxsem1" placeholder="Max course number Sem 1 (default: 6)"/>
+        <input type="text" class="form-control" id="done12" name="maxsem2" placeholder="Max course number Sem 2 (default: 6)"/>
+        <input type="text" class="form-control" id="done9" name="maxsem3" placeholder="Max AUs Sem 1 (default: 18)"/>
+        <input type="text" class="form-control" id="done10" name="maxsem4" placeholder="Max AUs Sem 2 (default: 18)"/>
+
+        <h3 align="center" style="font-weight: bold;">Course Done</h3>
+        <input type="text" class="form-control" id="done1" name="done1" placeholder="Course 1"/>
+        <input type="text" class="form-control" id="done2" name="done2" placeholder="Course 2"/>
+        <input type="text" class="form-control" id="done3" name="done3" placeholder="Course 3"/>
+        <input type="text" class="form-control" id="done4" name="done4" placeholder="Course 4"/>
+        <input type="text" class="form-control" id="done5" name="done5" placeholder="Course 5"/>
+        <input type="text" class="form-control" id="done6" name="done6" placeholder="Course 6"/>
+        <input type="text" class="form-control" id="done7" name="done7" placeholder="Course 7"/>
+        <input type="text" class="form-control" id="done8" name="done8" placeholder="Course 8"/>
+
+        <button type="submit" id="optimize-button" class="btn btn-primary" style="background-color: #000000; border-color: #000000;">Optimize</button>
+        <button type="button" id="view-result" class="btn btn-primary" onclick="generateOutput()" style="background-color: #000000; border-color: #000000;">View Result</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="column-2">
+    <div class="form-wrapper">
+    <h3 align="center" style="font-weight: bold;">Interest Indication</h3>
+    <div class="dynamic-table-2">
+      <table id="optimized-rows-table" class="table table-bordered">
+      <!-- Table content will be inserted here -->
+      </table>
+    </div>
+
+    <button type="button" id="clear-button" class="btn btn-primary" style="background-color: #000000; border-color: #000000; margin: 10px 0 5px 10px">Clear</button>
+    <button type="button" id="back-to-select" onclick="backToSelect()" class="btn btn-primary" style="background-color: #000000; border-color: #000000; margin: 10px 0 5px 0;">Back to Select</button>
+
+  </div>
+
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+  const optimizedTable = document.getElementById('optimized-rows-table');
+  const existingContent = localStorage.getItem('optimizedContent');
+
+  if (existingContent) {
+    // Populate the table with the existing content
+    optimizedTable.innerHTML = existingContent;
+  }
+
+  // Add a click event listener to the clear button
+  const clearButton = document.getElementById('clear-button');
+  clearButton.addEventListener('click', function() {
+    // Clear the table content and remove the data from local storage
+    optimizedTable.innerHTML = '';
+    localStorage.removeItem('optimizedContent');
+  });
+});
+
+function backToSelect () {
+  window.location.href = '/';}
+function generateOutput () {
+  window.location.href = '/result';}
+
+const tableData = localStorage.getItem('optimizedContent');
+
+fetch('/optimize', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ optimizedContent: tableData })
+})
+.then(response => response.json())
+.then(data => {
+  console.log(data);
+}).catch(error => console.error(error));
+
+function saveInput(inputId) {
+  const inputField = document.getElementById(inputId);
+  const inputValue = inputField.value;
+  localStorage.setItem(`savedInput_${inputId}`, inputValue);
+}
+
+// Function to load the input value from localStorage on page load
+function loadInput(inputId) {
+  const inputField = document.getElementById(inputId);
+  const savedInput = localStorage.getItem(`savedInput_${inputId}`);
+  if (savedInput !== null) {
+    inputField.value = savedInput;
+  }
+}
+
+for (let i = 1; i <= 12; i++) {
+  const inputId = `done${i}`;
+  document.getElementById(inputId).addEventListener('input', function () {
+    saveInput(inputId);
+  });
+  document.addEventListener('DOMContentLoaded', function () {
+    loadInput(inputId);
+  });
+}
+
+function showCustomAlert() {
+    Swal.fire({
+      title: 'Optimized Successfully',
+      icon: 'success',
+      text: 'View Result to see the output',
+      confirmButtonColor: '#000000',
+      confirmButtonText: 'OK'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // If the user clicked "OK," submit the form
+        document.getElementById('done-before').submit();
+      }
+    });
+  }
+
+  document.getElementById('optimize-button').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+    showCustomAlert(); // Call the custom alert function
+  });
+
+</script>
+
+{%endblock%}

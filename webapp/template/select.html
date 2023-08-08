@@ -1,0 +1,92 @@
+{% extends "base.html" %} {% block title %} Selection {% endblock %}
+{% block content %}
+<div class="column-container">
+    <div class="column-1">
+        <div class="form-wrapper">
+            <form method="POST" id="filter-form">
+                <h3 align="center" style="font-weight: bold;">NBS Course Filter</h3>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="coursecode" name="coursecode" placeholder="Course code (eg: BC2410)"/>
+                    <input type="text" class="form-control" id="coursename" name="coursename" placeholder="Course name (eg: Prescriptive Analytics)"/>
+                    <input type="text" class="form-control" id="credit" name="credit" placeholder="Course AUs"/>
+                    <input type="text" class="form-control" id="prerequisite" name="prerequisite" placeholder="Pre-requisite course code"/>
+                    <input type="text" class="form-control" id="semester" name="semester" placeholder="Semester offered"/>
+                    <button type="submit" class="btn btn-primary" style="background-color: #000000; border-color: #000000;" id="apply-filter">Apply Filter</button>
+                </div>
+            </form>
+        </div>
+        <div class="form-wrapper">
+            <h3 align="center" style="font-weight: bold;">Course Selected</h3>
+            <div id="selected-rows" class="select-table" contenteditable="true">
+                </table>
+                <table id="selected-rows-table" class="table table-bordered">
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+            <button onclick="saveAndNavigate()" id="save-button" type="submit" class="btn btn-primary" style="background-color: #000000; border-color: #000000; margin: 5px 20px">Add Course</button>
+        </div>
+    </div>
+
+    <div class="column-2">
+
+        <div class="form-wrapper">
+            <h3 align="center" style="font-weight: bold;">Course Table</h3>
+            <div class="dynamic-table" id="data-table">
+            {% for table in tables %}
+            {{ table|safe }}
+            {% endfor %}
+<!--                {{ table_html|safe}}-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+function copyRow(button) {
+    // Get the row containing the clicked button
+    var row = button.parentNode.parentNode;
+
+    // Get the first and second elements (cells) of the row
+    var numElement = row.childNodes[3].innerText
+
+    var firstCell = row.childNodes[3].outerHTML;
+    var secondCell = row.childNodes[5].outerHTML;
+    var thirdCell = row.childNodes[7].outerHTML;
+    var forthCell = row.childNodes[15].outerHTML;
+
+    // Create a new table row with the first and second elements
+    var newRow = document.createElement("tr");
+    newRow.innerHTML = firstCell + secondCell + thirdCell + forthCell;
+
+    // Append the new row to the "selected-rows-table" tbody
+    var selectedRowsTableBody = document.getElementById("selected-rows-table").getElementsByTagName('tbody')[0];
+    selectedRowsTableBody.appendChild(newRow);}
+
+function captureTableContent() {
+      const table = document.getElementById('selected-rows-table');
+      const tableContent = table.innerHTML;
+      alert(tableContent);
+    }
+
+function saveAndNavigate() {
+  const table = document.getElementById('selected-rows-table');
+  const tableContent = table.innerHTML;
+
+  // Retrieve the existing content from local storage
+  const existingContent = localStorage.getItem('optimizedContent');
+
+  // Append the new content to the existing content (if any)
+  const updatedContent = existingContent ? existingContent + tableContent : tableContent;
+
+  // Save the updated content to local storage
+  localStorage.setItem('optimizedContent', updatedContent);
+
+  // Navigate to the /optimize page
+  window.location.href = '/optimize';
+}
+
+</script>
+{%endblock%}
