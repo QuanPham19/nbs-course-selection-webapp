@@ -3,7 +3,7 @@ This project is an interactive web application where students can input their in
 
 The information of all courses can be found on Nanyang Business School website: http://web.nbs.ntu.edu.sg/undergrad/common/contents/courselist.asp
 
-There are 4 main screens: Select (Homepage), Optimize, Result and Reference.
+There are 4 main screens: Select (Homepage), Optimize, Result and Reference. The model will run on back-end after triggering Optimize, and output will be sent back to front-end by View Result.
  
 ![demo1](https://github.com/QuanPham19/nbs-course-selection-webapp/assets/106662700/9825ddfe-6a6f-49ea-b84e-5be2cf8152b9)
 
