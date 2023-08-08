@@ -6,4 +6,4 @@ There are 4 main screens: Select (Homepage), Optimize, Result and Reference.
  
 ![demo1](https://github.com/QuanPham19/nbs-course-selection-webapp/assets/106662700/9825ddfe-6a6f-49ea-b84e-5be2cf8152b9)
 
-Users can filter, select courses and add a batch of courses to optimize page.
+Users can filter and select courses that they want. The available fields for filtering are Course Code, Name, AUs, Pre-requisite and Semester offered. Then users can add a batch of courses to Optimize page.
